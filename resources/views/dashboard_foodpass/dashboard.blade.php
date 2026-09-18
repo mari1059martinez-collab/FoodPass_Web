@@ -5,6 +5,7 @@
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;family=Inter:wght@400;500;600&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
 <script id="tailwind-config">
       tailwind.config = {
@@ -87,30 +88,71 @@
         h1, h2, h3, .font-headline {
             font-family: 'Plus Jakarta Sans', sans-serif;
         }
+        [x-cloak] { display: none !important; }
     </style>
 </head>
-<body class="bg-surface text-on-background">
+<body class="bg-surface text-on-background" x-data="{ showNotifs: false }">
 @include('partials.sidebar')
 <!-- TopNavBar Shell -->
 <header class="fixed top-0 right-0 w-full lg:w-[calc(100%-16rem)] h-16 z-30 bg-white/80 dark:bg-[#121f05]/80 backdrop-blur-md shadow-[0px_20px_40px_rgba(18,31,5,0.06)] flex justify-between items-center px-6 transition-colors duration-300">
 <div class="flex items-center gap-4 flex-1">
 <div class="lg:hidden text-lg font-bold text-[#273517] dark:text-white">FoodPass</div>
-<div class="hidden lg:flex items-center bg-surface-container px-4 py-2 rounded-full w-96 max-w-md">
-<span class="material-symbols-outlined text-outline" data-icon="search">search</span>
-<input class="bg-transparent border-none focus:ring-0 text-sm w-full font-label placeholder:text-outline" placeholder="Buscar pedidos o facturas..." type="text"/>
+<!-- Requerimiento 1: Buscador eliminado del Dashboard -->
 </div>
-</div>
-<div class="flex items-center gap-6">
-<button class="relative p-2 text-on-background hover:bg-gray-50 rounded-full transition-colors">
+
+<div class="flex items-center gap-6 relative">
+<!-- Requerimiento 2: Campana de Notificaciones Interactiva con Dropdown -->
+<div class="relative">
+<button @click="showNotifs = !showNotifs" @click.away="showNotifs = false" class="relative p-2 text-on-background hover:bg-gray-100 dark:hover:bg-white/10 rounded-full transition-colors focus:outline-none">
 <span class="material-symbols-outlined" data-icon="notifications">notifications</span>
-<span class="absolute top-2 right-2 w-2 h-2 bg-primary-container rounded-full"></span>
+<span class="absolute top-2 right-2 w-2.5 h-2.5 bg-primary-container rounded-full ring-2 ring-white"></span>
 </button>
-<div class="flex items-center gap-3">
-<span class="hidden md:block font-['Plus_Jakarta_Sans'] font-semibold text-on-background">{{ auth()->user()->name }}</span>
-<div class="w-8 h-8 rounded-full bg-surface-container-highest overflow-hidden">
-<img alt="User Profile" data-alt="profile photo of a young adult male with a friendly expression in high-quality professional lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDuch-4jPeslYZY_jTtjGhunCaWFMUU2R3KGeqH0c0kboLhR1HtcmNhw_W1PkDVbdrrlKXPLBYkPYe9NbQVRLu5PUn8xv3SPrXe9V0en7DggcpYCLsQKToOdX05D4RRXjnn7u-5P9ufiEPjxucTJgL_w_gnUUbC04zfeFp-2896ch2qxJVK1xkrJVw6e56tVNbQ9o8JqocqDLG98Jzk6_SN9M3S-IciNPOZltJhrQ3Drc8vjmLtDoEet1FkW9FOsqiVASO1RqGMhrU"/>
+
+<!-- Popover / Menú desplegable de notificaciones -->
+<div x-show="showNotifs" x-transition x-cloak class="absolute right-0 mt-2 w-80 bg-white dark:bg-[#1f2d12] rounded-2xl shadow-xl border border-gray-100 dark:border-white/10 py-3 z-50">
+<div class="px-4 pb-2 border-b border-gray-100 dark:border-white/10 flex items-center justify-between">
+<span class="font-headline font-bold text-sm text-on-background dark:text-white">Notificaciones de Menú</span>
+<span class="text-[10px] bg-primary-container text-white px-2 py-0.5 rounded-full font-bold">2 nuevas</span>
+</div>
+<div class="divide-y divide-gray-50 dark:divide-white/5 max-h-72 overflow-y-auto">
+<!-- Mensaje de prueba 1: Agotado -->
+<div class="p-3.5 hover:bg-surface-container-low/50 transition-colors flex items-start gap-3">
+<div class="w-8 h-8 rounded-full bg-red-100 text-red-600 flex items-center justify-center shrink-0 text-sm mt-0.5">
+<span class="material-symbols-outlined text-[18px]">block</span>
+</div>
+<div class="flex-1">
+<p class="text-xs font-bold text-on-background dark:text-white">Platillo Agotado</p>
+<p class="text-xs text-on-surface-variant dark:text-gray-300 font-medium mt-0.5">El platillo <span class="font-bold text-red-600">Sopa de Lima</span> se encuentra agotado actualmente.</p>
+<span class="text-[10px] text-gray-400 mt-1 block">Hace 15 min</span>
 </div>
 </div>
+<!-- Mensaje de prueba 2: Cambio de precio -->
+<div class="p-3.5 hover:bg-surface-container-low/50 transition-colors flex items-start gap-3">
+<div class="w-8 h-8 rounded-full bg-amber-100 text-amber-700 flex items-center justify-center shrink-0 text-sm mt-0.5">
+<span class="material-symbols-outlined text-[18px]">sell</span>
+</div>
+<div class="flex-1">
+<p class="text-xs font-bold text-on-background dark:text-white">Cambio de Precio</p>
+<p class="text-xs text-on-surface-variant dark:text-gray-300 font-medium mt-0.5"><span class="font-bold text-amber-700">Carne de Cerdo</span> cambió de precio a <span class="font-bold text-primary">$9.500 COP</span>.</p>
+<span class="text-[10px] text-gray-400 mt-1 block">Hace 1 hora</span>
+</div>
+</div>
+<!-- Mensaje 3: Menú general -->
+<div class="p-3.5 hover:bg-surface-container-low/50 transition-colors flex items-start gap-3">
+<div class="w-8 h-8 rounded-full bg-green-100 text-green-700 flex items-center justify-center shrink-0 text-sm mt-0.5">
+<span class="material-symbols-outlined text-[18px]">restaurant_menu</span>
+</div>
+<div class="flex-1">
+<p class="text-xs font-bold text-on-background dark:text-white">Menú Actualizado</p>
+<p class="text-xs text-on-surface-variant dark:text-gray-300 font-medium mt-0.5">El menú de la Cafetería SENA ha sido actualizado para la jornada de hoy.</p>
+<span class="text-[10px] text-gray-400 mt-1 block">Hoy, 08:00 AM</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<!-- Requerimiento 6: Eliminado nombre de usuario e icono redundant en el header -->
 </div>
 </header>
 <!-- Main Content Canvas -->
@@ -156,21 +198,21 @@
 <p class="text-3xl font-headline font-extrabold text-on-background">48</p>
 </div>
 </div>
-<!-- Estado de Cuenta -->
-<div class="bg-inverse-surface rounded-[2rem] p-6 text-white flex flex-col justify-between h-full">
+<!-- Requerimiento 3: Botón Estado de Cuenta redirecciona a vista de Pagos (metodos-pago) -->
+<a href="{{ route('metodos-pago') }}" class="bg-inverse-surface rounded-[2rem] p-6 text-white flex flex-col justify-between h-full hover:opacity-95 hover:scale-[1.01] transition-all group cursor-pointer">
 <div class="flex justify-between items-start">
 <div class="w-12 h-12 bg-white/10 rounded-2xl flex items-center justify-center">
 <span class="material-symbols-outlined text-primary-container" data-icon="account_balance_wallet" style="font-variation-settings: 'FILL' 1;">account_balance_wallet</span>
 </div>
-<button class="text-white/40 hover:text-white transition-colors">
+<div class="text-white/40 group-hover:text-white transition-colors">
 <span class="material-symbols-outlined" data-icon="arrow_forward_ios">arrow_forward_ios</span>
-</button>
+</div>
 </div>
 <div>
 <p class="text-white/60 text-sm font-semibold uppercase tracking-wider mb-1">Estado de cuenta</p>
 <p class="text-2xl font-headline font-bold">$12.450,00</p>
 </div>
-</div>
+</a>
 </div>
 </div>
 <!-- Asymmetric Section: Recent Activity & Featured Menu -->
@@ -179,7 +221,8 @@
 <div class="lg:col-span-2">
 <div class="flex items-center justify-between mb-6 px-2">
 <h4 class="text-xl font-headline font-bold text-on-background">Historial de Consumo</h4>
-<a class="text-primary font-semibold text-sm hover:underline" href="#">Ver todo</a>
+<!-- Requerimiento 7: Botón "Ver todo" redirecciona a vista Historial -->
+<a class="text-primary font-semibold text-sm hover:underline" href="{{ route('historial') }}">Ver todo</a>
 </div>
 <div class="bg-surface-container-lowest rounded-[2rem] overflow-hidden">
 <div class="p-6 flex items-center gap-4 hover:bg-surface-container-low transition-colors duration-200">
@@ -240,19 +283,20 @@
 <div class="px-4 pb-6 pt-2">
 <h5 class="text-lg font-headline font-bold text-on-background mb-1">Poke Bowl de Salmón</h5>
 <p class="text-sm text-on-surface-variant mb-6 leading-relaxed">Arroz integral, aguacate fresco y edamame con aderezo cítrico.</p>
-<button class="w-full bg-primary-container text-on-primary-container font-headline font-bold py-4 rounded-2xl hover:scale-[1.02] active:scale-95 transition-all shadow-lg shadow-primary-container/10">
-                            Pedir ahora
-                        </button>
+<!-- Requerimiento 4: Botón "Pedir ahora" redirecciona a la vista de Menú -->
+<a href="{{ route('menu-digital') }}" class="w-full bg-primary-container text-on-primary-container font-headline font-bold py-4 rounded-2xl hover:scale-[1.02] active:scale-95 transition-all shadow-lg shadow-primary-container/10 flex items-center justify-center">
+    Pedir ahora
+</a>
 </div>
 </div>
 </div>
 </div>
 </main>
-<!-- Floating Action Button - Only for Dashboard Context -->
-<button class="fixed bottom-8 right-8 w-16 h-16 bg-primary-container text-on-primary-container rounded-full shadow-[0px_20px_40px_rgba(18,31,5,0.2)] flex items-center justify-center group hover:scale-110 active:scale-95 transition-all z-50">
+<!-- Requerimiento 5: Botón flotante QR de Canje redirecciona a la vista de Canje -->
+<a href="{{ route('canje') }}" class="fixed bottom-8 right-8 w-16 h-16 bg-primary-container text-on-primary-container rounded-full shadow-[0px_20px_40px_rgba(18,31,5,0.2)] flex items-center justify-center group hover:scale-110 active:scale-95 transition-all z-50">
 <span class="material-symbols-outlined text-3xl" data-icon="qr_code_2">qr_code_2</span>
 <div class="absolute right-full mr-4 bg-inverse-surface text-white text-sm font-bold py-2 px-4 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">
-            Escanear para Canje
-        </div>
-</button>
+    Escanear para Canje
+</div>
+</a>
 </body></html>

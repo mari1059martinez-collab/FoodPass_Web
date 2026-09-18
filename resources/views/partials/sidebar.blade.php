@@ -44,19 +44,52 @@
     </nav>
 
     <!-- Usuario autenticado al pie -->
-    <div class="mt-auto p-6 border-t border-white/5">
-        <a href="{{ route('perfil') }}" class="flex items-center gap-3 px-2 py-3 rounded-xl bg-white/5 hover:bg-white/10 transition-colors">
-            @if(auth()->check() && auth()->user()->foto_perfil)
-                <img alt="User avatar" class="w-10 h-10 rounded-full object-cover border border-white/20 shrink-0" src="{{ asset('storage/' . auth()->user()->foto_perfil) }}"/>
-            @else
-                <div class="w-10 h-10 rounded-full bg-[#F97F2D] text-white flex items-center justify-center font-bold text-sm shadow-sm shrink-0">
-                    {{ auth()->check() ? substr(auth()->user()->name, 0, 1) : 'U' }}
+    <div class="mt-auto p-6 border-t border-white/5 relative" x-data="{ openUserMenu: false, modalLogoutConfirm: false }">
+        <!-- Botón del usuario -->
+        <button @click="openUserMenu = !openUserMenu" @click.away="openUserMenu = false" type="button" class="w-full flex items-center justify-between gap-3 px-3 py-3 rounded-xl bg-white/5 hover:bg-white/10 transition-all text-left focus:outline-none group cursor-pointer">
+            <div class="flex items-center gap-3 overflow-hidden">
+                @if(auth()->check() && auth()->user()->foto_perfil)
+                    <img alt="User avatar" class="w-10 h-10 rounded-full object-cover border border-white/20 shrink-0" src="{{ asset('storage/' . auth()->user()->foto_perfil) }}"/>
+                @else
+                    <div class="w-10 h-10 rounded-full bg-[#F97F2D] text-white flex items-center justify-center font-bold text-sm shadow-sm shrink-0">
+                        {{ auth()->check() ? substr(auth()->user()->name, 0, 1) : 'U' }}
+                    </div>
+                @endif
+                <div class="overflow-hidden">
+                    <p class="text-white font-bold truncate text-sm">{{ auth()->check() ? auth()->user()->name : 'Usuario SENA' }}</p>
+                    <p class="text-white/40 text-xs truncate">Aprendiz SENA</p>
                 </div>
-            @endif
-            <div class="overflow-hidden">
-                <p class="text-white font-bold truncate text-sm">{{ auth()->check() ? auth()->user()->name : 'Usuario SENA' }}</p>
-                <p class="text-white/40 text-xs truncate">Aprendiz SENA</p>
             </div>
-        </a>
+            <span class="material-symbols-outlined text-white/40 group-hover:text-white transition-colors text-[20px]">more_vert</span>
+        </button>
+
+        <!-- Menú desplegable: Única opción Cerrar sesión -->
+        <div x-show="openUserMenu" x-transition x-cloak class="absolute bottom-20 left-6 right-6 bg-[#1b2610] rounded-2xl shadow-2xl border border-white/10 p-2 z-50">
+            <button type="button" @click="modalLogoutConfirm = true; openUserMenu = false;" class="w-full flex items-center gap-3 px-4 py-3 text-sm font-bold text-red-400 hover:bg-red-500/20 hover:text-red-300 rounded-xl transition-colors text-left">
+                <span class="material-symbols-outlined text-[20px]">logout</span>
+                <span>Cerrar Sesión</span>
+            </button>
+        </div>
+
+        <!-- Pop-up Modal de Confirmación para Cerrar Sesión -->
+        <div x-show="modalLogoutConfirm" x-cloak class="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm p-4" x-transition>
+            <div class="bg-white rounded-3xl max-w-sm w-full p-6 shadow-2xl relative text-center" @click.away="modalLogoutConfirm = false">
+                <div class="w-14 h-14 bg-red-100 text-red-600 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <span class="material-symbols-outlined text-[30px]">logout</span>
+                </div>
+                <h3 class="text-xl font-bold text-gray-900 mb-2">¿Cerrar Sesión?</h3>
+                <p class="text-xs text-gray-500 mb-6">¿Estás seguro de que deseas salir de tu cuenta de FoodPass?</p>
+                
+                <form method="POST" action="{{ route('logout') }}" class="flex gap-3">
+                    @csrf
+                    <button type="button" @click="modalLogoutConfirm = false" class="flex-1 border border-gray-300 text-gray-700 py-3 rounded-xl font-bold text-xs hover:bg-gray-50 transition-colors">
+                        Cancelar
+                    </button>
+                    <button type="submit" class="flex-1 bg-red-600 hover:bg-red-700 text-white py-3 rounded-xl font-bold text-xs shadow-md transition-colors">
+                        Sí, Salir
+                    </button>
+                </form>
+            </div>
+        </div>
     </div>
 </aside>

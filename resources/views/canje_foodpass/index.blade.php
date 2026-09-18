@@ -48,20 +48,6 @@
 
     <!-- Main Content -->
     <div class="ml-64 flex-1 flex flex-col overflow-hidden">
-        <header class="h-14 bg-white border-b border-gray-100 flex items-center justify-between px-6 flex-shrink-0 z-10">
-            <div class="flex items-center w-96 relative">
-                <svg class="w-5 h-5 text-gray-400 absolute left-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
-                <input type="text" placeholder="Buscar restaurantes..." class="w-full bg-gray-50 text-sm rounded-full pl-10 pr-4 py-2 border-none focus:ring-2 focus:ring-fp-orange/20 outline-none transition-all placeholder-gray-400">
-            </div>
-            
-            <div class="flex items-center space-x-4">
-                <div class="flex items-center gap-2 cursor-pointer">
-                    <span class="text-sm font-semibold text-gray-700 hidden sm:block">{{ $user->name }}</span>
-                    <img src="https://ui-avatars.com/api/?name={{ urlencode($user->name) }}&background=f97316&color=fff" alt="Avatar" class="w-8 h-8 rounded-full border border-gray-100 shadow-sm">
-                </div>
-            </div>
-        </header>
-
         <main class="flex-1 overflow-y-auto p-6 lg:p-10 relative">
             <div class="max-w-6xl mx-auto">
                 <div class="mb-10">

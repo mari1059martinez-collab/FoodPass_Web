@@ -120,14 +120,11 @@ Route::middleware('auth')->group(function () {
         ->name('cuenta.destroy');
 
     // --- RF04: Canje y Beneficio SENA ---
-    Route::middleware(['role:beneficiario,admin', 'throttle:foodpass'])->group(function () {
+    Route::get('/canje', [CanjeController::class, 'index'])
+        ->name('canje');
 
-        Route::get('/canje', [CanjeController::class, 'index'])
-            ->name('canje');
-
-        Route::post('/canje', [CanjeController::class, 'store'])
-            ->name('canje.store');
-    });
+    Route::post('/canje', [CanjeController::class, 'store'])
+        ->name('canje.store');
 
     // Harvest Ledger
     Route::get('/harvest-ledger', [HarvestLedgerController::class, 'index'])

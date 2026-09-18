@@ -20,20 +20,6 @@
 
     <!-- Main Content -->
     <main class="flex-1 ml-64 flex flex-col h-full relative">
-        <!-- Header -->
-        <header class="h-14 bg-white/80 backdrop-blur-md flex items-center justify-between px-8 border-b border-black/5 z-10 shrink-0">
-            <div class="w-96 relative">
-                <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-[18px]">search</span>
-                <input type="text" placeholder="Buscar pedidos..." class="w-full pl-9 pr-4 py-1.5 bg-gray-100/50 rounded-lg text-sm focus:outline-none">
-            </div>
-            <div class="flex items-center gap-5">
-                <div class="flex items-center gap-3 border-l pl-5 border-gray-200">
-                    <span class="text-sm font-medium">{{ auth()->user()->name }}</span>
-                    <img src="https://ui-avatars.com/api/?name={{ urlencode(auth()->user()->name) }}&background=F97F2D&color=fff" class="w-8 h-8 rounded-full">
-                </div>
-            </div>
-        </header>
-
         <!-- Page Content -->
         <div class="flex-1 overflow-y-auto p-8">
             <div class="max-w-6xl mx-auto space-y-8 pb-20">
@@ -170,11 +156,6 @@
 
             </div>
         </div>
-
-        <!-- FAB -->
-        <a href="{{ route('canje') }}" class="fixed bottom-8 right-8 w-14 h-14 bg-[#F97F2D] hover:bg-[#e06d20] text-white rounded-full shadow-lg flex items-center justify-center transition-transform hover:scale-105 z-50">
-            <span class="material-symbols-outlined text-[28px]">add</span>
-        </a>
     </main>
 </body>
 </html>

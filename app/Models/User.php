@@ -100,6 +100,6 @@ class User extends Authenticatable implements MustVerifyEmail
 
     public function pedidos()
     {
-        return $this->hasMany(Pedido::class, 'usuario_id', 'id');
+        return $this->hasMany(Pedido::class, 'user_id', 'id');
     }
 }

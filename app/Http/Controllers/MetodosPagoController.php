@@ -10,6 +10,11 @@ class MetodosPagoController extends Controller
     public function index()
     {
         $usuario = Auth::user();
-        return view('m_todos_de_pago_foodpass.m_todos_de_pago', compact('usuario'));
+        $pedidos = \App\Models\Pedido::where('user_id', Auth::id())
+            ->with('detalles.platillo')
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        return view('m_todos_de_pago_foodpass.m_todos_de_pago', compact('usuario', 'pedidos'));
     }
 }
