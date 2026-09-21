@@ -22,15 +22,13 @@ class HistorialController extends Controller
             ->select('id', 'created_at', 'estado', DB::raw("'Compra menú digital' as detalle"), 'total', DB::raw("'pedido' as tipo"))
             ->where('user_id', $userId);
 
-        // 3. Unimos ambas consultas
+        // 3. Unimos ambas consultas correctamente usando fromSub
         $unionQuery = $canjes->union($pedidosQuery);
 
-        // Preparamos la subconsulta para poder filtrar y paginar la unión
-        $query = DB::table(DB::raw("({$unionQuery->toSql()}) as historial"))
-            ->mergeBindings($unionQuery);
+        $query = DB::query()->fromSub($unionQuery, 'historial');
 
         if ($request->filter == 'ultimos_30') {
-            $query->where('created_at', '>=', now()->subDays(30));
+            $query->where('created_at', '>=', now()->subDays(30)->toDateTimeString());
         } elseif ($request->filter == 'pendientes') {
             $query->where('estado', 'pendiente');
         }
