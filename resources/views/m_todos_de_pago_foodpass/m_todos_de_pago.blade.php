@@ -352,24 +352,36 @@
                 <div>
                     <label class="block text-xs font-bold uppercase tracking-wider text-gray-600 mb-1">Nombre del Titular</label>
                     <input type="text" x-model="nuevaTarjeta.nombreTitular" required placeholder="Ej: Camilo Valencia" 
+                           @input="nuevaTarjeta.nombreTitular = nuevaTarjeta.nombreTitular.replace(/[^A-Za-záéíóúÁÉÍÓÚñÑ\s]/g, '').trimStart()"
+                           pattern=".*[A-Za-záéíóúÁÉÍÓÚñÑ].*"
+                           title="Ingresa solo el nombre del titular en letras"
                            class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500">
                 </div>
 
                 <div>
                     <label class="block text-xs font-bold uppercase tracking-wider text-gray-600 mb-1">Número de Tarjeta</label>
                     <input type="text" x-model="nuevaTarjeta.numero" required placeholder="4000 0000 0000 0000" maxlength="19"
+                           @input="nuevaTarjeta.numero = nuevaTarjeta.numero.replace(/[^0-9\s]/g, '').trimStart()"
+                           pattern="^[\d\s]{13,19}$"
+                           title="Ingresa un número de tarjeta válido (solo números y espacios)"
                            class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500">
                 </div>
 
                 <div class="grid grid-cols-2 gap-3">
                     <div>
                         <label class="block text-xs font-bold uppercase tracking-wider text-gray-600 mb-1">Expiración (MM/YY)</label>
-                        <input type="text" x-model="nuevaTarjeta.expiracion" placeholder="12/28" maxlength="5"
+                        <input type="text" x-model="nuevaTarjeta.expiracion" required placeholder="12/28" maxlength="5"
+                               @input="nuevaTarjeta.expiracion = nuevaTarjeta.expiracion.replace(/[^0-9/]/g, '').trimStart()"
+                               pattern="^(0[1-9]|1[0-2])\/?([0-9]{2})$"
+                               title="El formato de expiración debe ser MM/YY (ej: 12/28)"
                                class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500">
                     </div>
                     <div>
                         <label class="block text-xs font-bold uppercase tracking-wider text-gray-600 mb-1">CVC / CVV</label>
-                        <input type="password" x-model="nuevaTarjeta.cvc" placeholder="123" maxlength="4"
+                        <input type="password" x-model="nuevaTarjeta.cvc" required placeholder="123" maxlength="4"
+                               @input="nuevaTarjeta.cvc = nuevaTarjeta.cvc.replace(/[^0-9]/g, '').trimStart()"
+                               pattern="^[0-9]{3,4}$"
+                               title="El código de seguridad debe tener 3 o 4 dígitos"
                                class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500">
                     </div>
                 </div>
