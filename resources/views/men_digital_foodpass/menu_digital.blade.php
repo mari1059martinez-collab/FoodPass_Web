@@ -175,7 +175,8 @@
 
                     @forelse($platillos as $platillo)
                         @php
-                            $imgIndex = (($loop->iteration - 1) % 3) + 1;
+                            // Usa las 12 imágenes descargadas en public/img antes de repetirlas.
+                            $imgIndex = (($loop->iteration - 1) % 12) + 1;
                             $imgPath = asset("img/imagen ($imgIndex).jpg");
                         @endphp
                         <div x-show="cumpleFiltro('{{ $platillo->categoria }}', '{{ strtolower($platillo->nombre) }}', '{{ strtolower($platillo->descripcion) }}')"
